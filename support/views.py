@@ -1,6 +1,8 @@
 from openai import OpenAI
 import os
 from django.shortcuts import render, redirect
+from django.core.management import call_command
+from django.http import HttpResponse
 from dotenv import load_dotenv
 from .forms import ConcernForm
 from .forms import SceneConfirmationForm
@@ -159,3 +161,8 @@ def summary(request):
     }
 
     return render(request, "support/summary.html", context)
+
+def run_migrate(request):
+    call_command("migrate")
+    return HttpResponse("Migration completed.")
+
