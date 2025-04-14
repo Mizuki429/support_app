@@ -8,6 +8,6 @@ urlpatterns = [
     path("support-need/", views.ask_support, name="ask_support"),
     path("ideal/", views.ask_ideal, name="ask_ideal"),
     path("summary/", views.summary, name="summary"),
-    path("run-migrate/", views.run_migrate),
-    path("", views.index, name="index"),
+#    path("run-migrate/", views.run_migrate),
+#    path("", views.index, name="index"),
 ]
