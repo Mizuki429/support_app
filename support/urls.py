@@ -9,4 +9,5 @@ urlpatterns = [
     path("ideal/", views.ask_ideal, name="ask_ideal"),
     path("summary/", views.summary, name="summary"),
     path("run-migrate/", views.run_migrate),
+    path("", views.index, name="index"),
 ]

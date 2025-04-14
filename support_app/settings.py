@@ -30,7 +30,6 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 DEBUG = True
 
 ALLOWED_HOSTS = ['support-app-59ua.onrender.com']
-#ALLOWED_HOSTS = ['*']
 
 
 
@@ -128,4 +127,3 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-ALLOWED_HOSTS = ['support.onrender.com']

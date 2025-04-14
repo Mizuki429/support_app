@@ -9,6 +9,7 @@ from .forms import SceneConfirmationForm
 from .forms import StrategyForm
 from .forms import SupportNeedForm
 from .forms import IdealLifeForm
+from django.http import HttpResponse
 
 load_dotenv()
 client = OpenAI(
@@ -165,4 +166,7 @@ def summary(request):
 def run_migrate(request):
     call_command("migrate")
     return HttpResponse("Migration completed.")
+
+def index(request):
+    return HttpResponse("Welcome to your Django app! 🎉")
 
