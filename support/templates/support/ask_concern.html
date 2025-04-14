@@ -1,0 +1,23 @@
+<!-- support/templates/support/ask_concern.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>困りごとを教えてください</title>
+</head>
+<body>
+    <h1>最初に、日常生活で困っていることを教えてください</h1>
+    <form method="post">
+        {% csrf_token %}
+        <!-- ラベル -->
+        <label for="{{ form.text.id_for_label }}">
+            {{ form.text.label }}
+        </label><br>
+
+        <!-- テキストエリア -->
+        {{ form.text }}<br>
+
+        <button type="submit">送信</button>
+    </form>
+</body>
+</html>

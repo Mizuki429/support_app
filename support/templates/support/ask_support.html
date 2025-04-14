@@ -1,0 +1,17 @@
+<!-- support/templates/support/ask_support.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>必要なサポートについて</title>
+</head>
+<body>
+    <h1>どんなサポートがあれば、もう少し楽になりそうですか？</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="{{ form.support.id_for_label }}">{{ form.support.label }}</label><br>
+        {{ form.support }}<br><br>
+        <button type="submit">次へ</button>
+    </form>
+</body>
+</html>

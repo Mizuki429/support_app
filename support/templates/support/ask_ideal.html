@@ -1,0 +1,17 @@
+<!-- support/templates/support/ask_ideal.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>理想の暮らしや働き方について</title>
+</head>
+<body>
+    <h1>理想の暮らしや働き方って、どんな感じですか？</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="{{ form.ideal.id_for_label }}">{{ form.ideal.label }}</label><br>
+        {{ form.ideal }}<br><br>
+        <button type="submit">次へ</button>
+    </form>
+</body>
+</html>

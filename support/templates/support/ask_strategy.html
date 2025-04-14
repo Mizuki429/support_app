@@ -1,0 +1,17 @@
+<!-- support/templates/support/ask_strategy.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>自分なりの工夫について</title>
+</head>
+<body>
+    <h1>あなたが先程の困りごとについて工夫していることがあれば教えてください</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="{{ form.strategy.id_for_label }}">{{ form.strategy.label }}</label><br>
+        {{ form.strategy }}<br><br>
+        <button type="submit">次へ</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!-- support/templates/support/confirm_scene.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>困っている場面についての確認</title>
+</head>
+<body>
+    <h1>こういう場面で特に困っていませんか？</h1>
+    <p>AIの回答:{{ suggestion|linebreaks }}</p>
+    <br>
+    <h1>困っていることがあれば更に詳しく教えてください</h1>
+    <form method="post">
+        {% csrf_token %}
+        <!-- ラベル -->
+        <label for="{{ form.text.id_for_label }}">
+            {{ form.text.label }}
+        </label><br>
+
+        <!-- テキストエリア -->
+        {{ form.detail }}<br>
+
+        <button type="submit">次へ</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!-- support/templates/support/summary.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>まとめとAIからの提案</title>
+</head>
+<body>
+    <h1>あなたの声、まとめました</h1>
+
+    <h2>困りごと</h2>
+    <p>{{ concern|linebreaks }}</p>
+
+    {% if scene_detail %}
+    <h2>特に困っていること</h2>
+    <p>{{ scene_detail|linebreaks }}</p>
+    {% endif %}
+
+    {% if strategy %}
+    <h2>自分なりに工夫していること</h2>
+    <p>{{ strategy|linebreaks }}</p>
+    {% endif %}
+
+    {% if support %}
+    <h2>あれば嬉しいサポート</h2>
+    <p>{{ support|linebreaks }}</p>
+    {% endif %}
+
+    {% if ideal %}
+    <h2>理想の暮らしや働き方</h2>
+    <p>{{ ideal|linebreaks }}</p>
+    {% endif %}
+
+    <hr><br>
+
+    <h2>AIからの提案</h2>
+    <p>{{ ai_response|linebreaks }}</p>
+
+    <br><br>
+    <a href="/support/ask/">最初からやり直す</a>
+</body>
+</html>
