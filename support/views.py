@@ -163,10 +163,4 @@ def summary(request):
 
     return render(request, "support/summary.html", context)
 
-#def run_migrate(request):
-#    call_command("migrate")
-#    return HttpResponse("Migration completed.")
-
-#def index(request):
-#    return HttpResponse("Welcome to your Django app! 🎉")
 
