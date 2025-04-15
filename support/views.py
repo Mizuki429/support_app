@@ -12,7 +12,10 @@ from .forms import IdealLifeForm
 from django.http import HttpResponse
 
 load_dotenv()
-print("🔑 API KEY:", os.getenv("OPENROUTER_API_KEY"))
+api_key = os.getenv("OPENROUTER_API_KEY")
+
+if not api_key:
+    raise Exception("❌ OPENROUTER_API_KEY is missing!")
 
 client = OpenAI(
     api_key=os.getenv("OPENROUTER_API_KEY"),
