@@ -11,7 +11,9 @@ from .forms import SupportNeedForm
 from .forms import IdealLifeForm
 from django.http import HttpResponse
 
-#load_dotenv()
+load_dotenv()
+print("🔑 API KEY:", os.getenv("OPENROUTER_API_KEY"))
+
 client = OpenAI(
     api_key=os.getenv("OPENROUTER_API_KEY"),
     base_url="https://openrouter.ai/api/v1"
