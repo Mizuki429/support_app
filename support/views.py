@@ -115,14 +115,6 @@ def ask_ideal(request):
     return render(request, "support/ask_ideal.html", {"form": form})
 
 #まとめ
-from openai import OpenAI
-import os
-
-client = OpenAI(
-    api_key=os.getenv("OPENROUTER_API_KEY"),
-    base_url="https://openrouter.ai/api/v1"
-)
-
 def summary(request):
     concern = request.session.get("concern", "")
     scene_suggestion = request.session.get("scene_suggestion", "")
