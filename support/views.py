@@ -48,7 +48,8 @@ def ask_concern(request):
 
             if response.status_code == 200:
                 result = response.json()
-                suggestion = result[0]["generated_text"] if isinstance(result, list) else result
+                #suggestion = result[0]["generated_text"] if isinstance(result, list) else result
+                suggestion = result["generated_text"] if isinstance(result, list) else result
                 request.session["scene_suggestion"] = suggestion
                 return redirect("confirm_scene")
             else:
