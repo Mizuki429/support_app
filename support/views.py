@@ -1,5 +1,6 @@
 import os
 import requests
+import time
 from openai import OpenAI
 from django.shortcuts import render, redirect
 from django.core.management import call_command
@@ -40,6 +41,12 @@ def ask_concern(request):
                 headers=headers,
                 json=payload
             )
+            
+            start = time.time()
+
+            response = requests.post(...)
+            print("応答時間:", time.time() - start)
+
 
             if response.status_code == 200:
                 result = response.json()
