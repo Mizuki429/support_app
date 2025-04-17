@@ -62,7 +62,7 @@ def confirm_scene(request):
 
     if not suggestion:
         messages.warning(request, "AIの推測結果が見つかりませんでした。もう一度入力してください。")
-	return redirect("ask_concern")
+        return redirect("ask_concern")
 
     if request.method == "POST":
         form = SceneConfirmationForm(request.POST)
