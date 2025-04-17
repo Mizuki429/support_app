@@ -13,6 +13,7 @@ from .forms import IdealLifeForm
 from django.http import HttpResponse
 
 load_dotenv()
+ai_API="https://api-inference.huggingface.co/models/AliiaR/DialoGPT-medium-empathetic-dialogues"
 
 #最初に何に困っているかを聞いたあと、AIに裏で問い合わせる
 def ask_concern(request):
@@ -34,7 +35,7 @@ def ask_concern(request):
             payload = {"inputs":prompt}
 
             response = requests.post(
-                "https://api-inference.huggingface.co/zementalist/llama-3-8B-chat-psychotherapist",
+                ai_API,
                 headers=headers,
                 json=payload
             )
@@ -150,7 +151,7 @@ def summary(request):
     }
 
     response = requests.post(
-        "https://api-inference.huggingface.co/zementalist/llama-3-8B-chat-psychotherapist",
+        ai_API,
         headers=headers,
         json=payload
     )
