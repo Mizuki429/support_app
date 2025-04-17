@@ -61,7 +61,7 @@ def confirm_scene(request):
     suggestion = request.session.get("suggestion", "")
 
     if not suggestion:
-        messages.warning(request, "message": "AIの推測結果が見つかりませんでした。もう一度入力してください。")
+        messages.warning(request, "AIの推測結果が見つかりませんでした。もう一度入力してください。")
 	return redirect("ask_concern")
 
     if request.method == "POST":
