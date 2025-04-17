@@ -61,7 +61,7 @@ def confirm_scene(request):
     suggestion = request.session.get("suggestion", "")
 
     if not suggestion:
-        return render(request, "support/ask_concern.html", {"message": "AIの推測結果が見つかりません"})
+        return render(request, "support/ask_concern.html", {"form":form, "suggestion":suggestion, "message": "AIの推測結果が見つかりません"})
 
     if request.method == "POST":
         form = SceneConfirmationForm(request.POST)
