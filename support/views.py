@@ -27,12 +27,13 @@ def ask_concern(request):
                 "Authorization": f"Bearer {hf_api_key}"
             }
 
-            payload = {
-                "inputs": f"ユーザーは「{concern_text}」と困っているようです。
+            prompt = (
+                f"ユーザーは「{concern_text}」と困っているようです。
 この内容から、どのような日常生活の場面で特に困っていそうか、推測してください。
 このあと、場面別に困りごとの深堀をします。
 やさしい語り口で、共感を示しながら、1〜2の具体的な場面を挙げてください。\nAI:"
-            }
+            )
+            payload = {"inputs":prompt}
 
             response = requests.post(
                 "https://huggingface.co/zementalist/llama-3-8B-chat-psychotherapist",
