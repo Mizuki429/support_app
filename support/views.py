@@ -34,7 +34,7 @@ def ask_concern(request):
             payload = {"inputs":prompt}
 
             response = requests.post(
-                "https://huggingface.co/zementalist/llama-3-8B-chat-psychotherapist",
+                "https://api-inference.huggingface.co/zementalist/llama-3-8B-chat-psychotherapist",
                 headers=headers,
                 json=payload
             )
@@ -148,7 +148,7 @@ def summary(request):
     }
 
     response = requests.post(
-        "https://huggingface.co/zementalist/llama-3-8B-chat-psychotherapist",
+        "https://api-inference.huggingface.co/zementalist/llama-3-8B-chat-psychotherapist",
         headers=headers,
         json=payload
     )
