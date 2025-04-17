@@ -39,8 +39,6 @@ def ask_concern(request):
                 headers=headers,
                 json=payload
             )
-            print(f"💬 API response code: {response.status_code}")
-            print(f"💬 API response body: {response.text}")
 
             if response.status_code == 200:
                 result = response.json()
@@ -52,7 +50,7 @@ def ask_concern(request):
 
     else:
         form = ConcernForm()
-
+    print(suggestion)
     return render(request, "support/ask_concern.html", {
         "form": form,
         "suggestion": suggestion
@@ -63,7 +61,7 @@ def confirm_scene(request):
     suggestion = request.session.get("suggestion", "")
 
     if not suggestion:
-        return render(request, "support/error.html", {"message": "AIの推測結果が見つかりません"})
+        return render(request, "support/ask_concern.html", {"message": "AIの推測結果が見つかりません"})
 
     if request.method == "POST":
         form = SceneConfirmationForm(request.POST)
