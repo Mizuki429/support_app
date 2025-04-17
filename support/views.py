@@ -4,6 +4,7 @@ from openai import OpenAI
 from django.shortcuts import render, redirect
 from django.core.management import call_command
 from django.http import HttpResponse
+from django.contrib import messages
 from dotenv import load_dotenv
 from .forms import ConcernForm
 from .forms import SceneConfirmationForm
