@@ -43,8 +43,6 @@ def ask_concern(request):
             )
             
             start = time.time()
-
-            response = requests.post(...)
             print("応答時間:", time.time() - start)
 
 
