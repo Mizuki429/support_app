@@ -38,6 +38,8 @@ def ask_concern(request):
                 headers=headers,
                 json=payload
             )
+            print(f"💬 API response code: {response.status_code}")
+            print(f"💬 API response body: {response.text}")
 
             if response.status_code == 200:
                 result = response.json()
