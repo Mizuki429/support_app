@@ -36,13 +36,13 @@ def ask_concern(request):
             )
             payload = {"inputs":prompt}
 
+            start = time.time()
             response = requests.post(
                 ai_API,
                 headers=headers,
                 json=payload
             )
             
-            start = time.time()
             print("応答時間:", time.time() - start)
 
 
