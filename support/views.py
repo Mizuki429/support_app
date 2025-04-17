@@ -12,47 +12,49 @@ from .forms import IdealLifeForm
 from django.http import HttpResponse
 
 load_dotenv()
-api_key = os.getenv("OPENROUTER_API_KEY")
-
-if not api_key:
-    raise Exception("❌ OPENROUTER_API_KEY is missing!")
-
-client = OpenAI(
-    api_key=os.getenv("OPENROUTER_API_KEY"),
-    base_url="https://openrouter.ai/api/v1"
-)
 
 #最初に何に困っているかを聞いたあと、AIに裏で問い合わせる
 def ask_concern(request):
+    suggestion = None
     if request.method == "POST":
         form = ConcernForm(request.POST)
         if form.is_valid():
             concern_text = form.cleaned_data["text"]
             request.session["concern"] = concern_text
-
+            hf_api_key = os.getenv("HUGGINGFACE_API_KEY")	
 # --- AIに裏で問い合わせる ---
-            prompt = f"""
-ユーザーは「{concern_text}」と困っているようです。
+            headers = {
+                "Authorization": f"Bearer {hf_api_key}"
+            }
+
+            payload = {
+                "inputs": f"ユーザーは「{concern_text}」と困っているようです。
 この内容から、どのような日常生活の場面で特に困っていそうか、推測してください。
 このあと、場面別に困りごとの深堀をします。
-やさしい語り口で、共感を示しながら、1〜2の具体的な場面を挙げてください。
-"""
+やさしい語り口で、共感を示しながら、1〜2の具体的な場面を挙げてください。\nAI:"
+            }
 
-            response = client.chat.completions.create(
-                model="anthropic/claude-3-haiku",
-                messages=[
-                    {"role": "system", "content": "あなたは共感的でやさしいカウンセラーです。"},
-                    {"role": "user", "content": prompt}
-                ]
+            response = requests.post(
+                "https://huggingface.co/zementalist/llama-3-8B-chat-psychotherapist",
+                headers=headers,
+                json=payload
             )
 
-            suggestion = response.choices[0].message.content
-            request.session["suggestion"] = suggestion
+            if response.status_code == 200:
+                result = response.json()
+                suggestion = result[0]["generated_text"] if isinstance(result, list) else result
+                request.session["scene_suggestion"] = suggestion
+                return redirect("confirm_scene")
+            else:
+                suggestion = "AIからの応答取得に失敗しました。"
 
-            return redirect("confirm_scene")
     else:
         form = ConcernForm()
-    return render(request, "support/ask_concern.html", {"form": form})
+
+    return render(request, "support/ask_concern.html", {
+        "form": form,
+        "suggestion": suggestion
+    })
 
 #AIで問い合わせた場面をもとに質問を掘り下げる
 def confirm_scene(request):
@@ -125,47 +127,53 @@ client = OpenAI(
 
 def summary(request):
     concern = request.session.get("concern", "")
-    scene_detail = request.session.get("scene_detail", "")
-    strategy = request.session.get("strategy", "")
-    support = request.session.get("support", "")
+    scene_suggestion = request.session.get("scene_suggestion", "")
+    custom_strategy = request.session.get("custom_strategy", "")
+    support_need = request.session.get("support_need", "")
     ideal = request.session.get("ideal", "")
 
-    # --- AIに提案をお願いするためのプロンプトを生成 ---
-    prompt = f"""
-ユーザーは次のような困りごとや希望を話しています：
+    # AI用プロンプトを組み立て
+    prompt = (
+        "あなたはユーザーの困りごとを理解し、必要なサポートや提案を共感的に伝えるカウンセラーです。\n"
+        "以下の内容をもとに、ユーザーに向けて優しく温かいアドバイスとまとめを書いてください。\n\n"
+        f"■困っていること:\n{concern}\n\n"
+        f"■AIが推測した困っていそうな場面:\n{scene_suggestion}\n\n"
+        f"■自分なりの工夫:\n{custom_strategy}\n\n"
+        f"■必要なサポート:\n{support_need}\n\n"
+        f"■理想の暮らし・働き方:\n{ideal}\n\n"
+        "【まとめと提案】"
+    )
 
-【困っていること】{concern}
-【本人の補足】{scene_detail}
-【工夫していること】{strategy}
-【欲しいサポート】{support}
-【理想の暮らし】{ideal}
+    hf_api_key = os.getenv("HF_API_KEY")
+    if not hf_api_key:
+        raise Exception("❌ Hugging Face APIキーが設定されていません。")
 
-この情報をもとに、ユーザーにとってどんなサポートや考え方が役立つか、
-やさしく、丁寧に、1〜3つの提案をしてください。
-できるだけ安心できる言葉で語りかけるようにお願いします。
-"""
-
-    try:
-        response = client.chat.completions.create(
-            model="anthropic/claude-3-haiku",
-            messages=[
-                {"role": "system", "content": "あなたは共感的で、やさしく思いやりのあるカウンセラーです。"},
-                {"role": "user", "content": prompt}
-            ]
-        )
-        ai_response = response.choices[0].message.content
-    except Exception as e:
-        ai_response = f"AIからの提案の取得に失敗しました：{str(e)}"
-
-    context = {
-        "concern": concern,
-        "scene_detail": scene_detail,
-        "strategy": strategy,
-        "support": support,
-        "ideal": ideal,
-        "ai_response": ai_response,
+    headers = {
+        "Authorization": f"Bearer {hf_api_key}"
     }
 
-    return render(request, "support/summary.html", context)
+    payload = {
+        "inputs": prompt
+    }
 
+    response = requests.post(
+        "https://huggingface.co/zementalist/llama-3-8B-chat-psychotherapist",
+        headers=headers,
+        json=payload
+    )
+
+    if response.status_code == 200:
+        result = response.json()
+        ai_summary = result[0]["generated_text"] if isinstance(result, list) else result
+    else:
+        ai_summary = "AIからの応答取得に失敗しました。"
+
+    return render(request, "support/summary.html", {
+        "concern": concern,
+        "scene_suggestion": scene_suggestion,
+        "custom_strategy": custom_strategy,
+        "support_need": support_need,
+        "ideal": ideal,
+        "ai_summary": ai_summary
+    })
 
