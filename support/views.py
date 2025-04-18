@@ -34,13 +34,19 @@ def ask_concern(request):
             prompt = (
                 f"ユーザーは「{concern_text}」と困っているようです。この内容から、どのような日常生活の場面で特に困っていそうか、推測してください。このあと、場面別に困りごとの深堀をします。やさしい語り口で、共感を示しながら、1〜2の具体的な場面を挙げてください。\nAI:"
             )
-            payload = {"inputs":prompt}
-
+            payload = {
+                "inputs": prompt,
+                "parameters": {
+                    "max_new_tokens": 100,
+                    "temperature": 0.7
+                }
+            }
             start = time.time()
             response = requests.post(
                 ai_API,
                 headers=headers,
-                json=payload
+                json=payload,
+                timeout=30
             )
             
             print("応答時間:", time.time() - start)
@@ -51,8 +57,12 @@ def ask_concern(request):
 
             if response.status_code == 200:
                 result = response.json()
-                suggestion = result[0]["generated_text"] if isinstance(result, list) else result
+                #suggestion = result[0]["generated_text"] if isinstance(result, list) else result
                 #suggestion = result["generated_text"] if isinstance(result, list) else result
+                if isinstance(result, list):
+                    generated = result[0].get("generated_text", "")
+                    suggestion = generated.split("AI:")[-1].strip()
+                
                 request.session["scene_suggestion"] = suggestion
                 return redirect("confirm_scene")
             else:
