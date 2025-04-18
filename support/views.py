@@ -1,6 +1,4 @@
 import os
-import requests
-import time
 from openai import OpenAI
 from django.shortcuts import render, redirect
 from django.core.management import call_command
