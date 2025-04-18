@@ -1,5 +1,5 @@
-import os
 from openai import OpenAI
+import os
 from django.shortcuts import render, redirect
 from django.core.management import call_command
 from django.http import HttpResponse
