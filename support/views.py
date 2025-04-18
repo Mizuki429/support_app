@@ -128,52 +128,49 @@ def ask_ideal(request):
 
 #まとめ
 def summary(request):
-    from openai import OpenAI
-
-    client = OpenAI(
-        api_key=os.getenv("OPENROUTER_API_KEY"),
-        base_url="https://openrouter.ai/api/v1"
-    )
-
-    # セッションからユーザー入力を取得
     concern = request.session.get("concern", "")
-    strategy = request.session.get("custom_strategy", "")
-    support = request.session.get("support_need", "")
+    suggestion = request.session.get("suggestion", "")
+    scene_detail = request.session.get("scene_detail", "")
+    strategy = request.session.get("strategy", "")
+    support = request.session.get("support", "")
     ideal = request.session.get("ideal", "")
 
-    # AIへのプロンプト作成
-    prompt = (
-        "以下の内容は、あるユーザーが抱えている困りごとや工夫、希望する支援についての情報です。\n\n"
-        f"困っていること: {concern}\n"
-        f"本人が工夫していること: {strategy}\n"
-        f"あったら嬉しい支援: {support}\n"
-        f"理想の暮らし・働き方: {ideal}\n\n"
-        "これらの情報をもとに、このユーザーにとって今後どのような支援が役立ちそうか、やさしい語り口で提案してください。"
-    )
+    # --- AIに提案をお願いするためのプロンプトを生成 ---
+    prompt = f"""
+ユーザーは次のような困りごとや希望を話しています：
+
+【困っていること】{concern}
+【AIが推測した困りごとの場面】{suggestion}
+【本人の補足】{scene_detail}
+【工夫していること】{strategy}
+【欲しいサポート】{support}
+【理想の暮らし】{ideal}
+
+この情報をもとに、ユーザーにとってどんなサポートや考え方が役立つか、
+やさしく、丁寧に、1〜3つの提案をしてください。
+できるだけ安心できる言葉で語りかけるようにお願いします。
+"""
 
     try:
         response = client.chat.completions.create(
-            model="mistralai/mistral-7b-instruct",  # ClaudeやGPTに変えることも可
+            model="anthropic/claude-3-haiku",
             messages=[
-                {"role": "system", "content": "あなたは福祉の専門家のような優しく思いやりのあるアシスタントです。"},
+                {"role": "system", "content": "あなたは共感的で、やさしく思いやりのあるカウンセラーです。"},
                 {"role": "user", "content": prompt}
-            ],
-            max_tokens=500,
-            temperature=0.7,
+            ]
         )
-
-        suggestion_summary = response.choices[0].message.content.strip()
-
+        ai_response = response.choices[0].message.content
     except Exception as e:
-        print("OpenRouter summary API error:", e)
-        suggestion_summary = "AIからのまとめ提案の取得に失敗しました。"
+        ai_response = f"AIからの提案の取得に失敗しました：{str(e)}"
 
-    return render(request, "support/summary.html", {
-        "summary": suggestion_summary,
+    context = {
         "concern": concern,
-        "scene": scene,
+        "suggestion": suggestion,
+        "scene_detail": scene_detail,
         "strategy": strategy,
         "support": support,
         "ideal": ideal,
-    })
+        "ai_response": ai_response,
+    }
 
+    return render(request, "support/summary.html", context)
