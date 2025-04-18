@@ -44,12 +44,15 @@ def ask_concern(request):
             )
             
             print("応答時間:", time.time() - start)
+            print("RESPONSE STATUS:", response.status_code)
+            print("RESPONSE TEXT:", response.text)
+            print("RESPONSE JSON:", response.json())
 
 
             if response.status_code == 200:
                 result = response.json()
-                #suggestion = result[0]["generated_text"] if isinstance(result, list) else result
-                suggestion = result["generated_text"] if isinstance(result, list) else result
+                suggestion = result[0]["generated_text"] if isinstance(result, list) else result
+                #suggestion = result["generated_text"] if isinstance(result, list) else result
                 request.session["scene_suggestion"] = suggestion
                 return redirect("confirm_scene")
             else:
