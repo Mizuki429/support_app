@@ -49,10 +49,10 @@ def ask_concern(request):
                 timeout=30
             )
             
-            print("応答時間:", time.time() - start)
-            print("RESPONSE STATUS:", response.status_code)
-            print("RESPONSE TEXT:", response.text)
-            print("RESPONSE JSON:", response.json())
+            #print("応答時間:", time.time() - start)
+            #print("RESPONSE STATUS:", response.status_code)
+            #print("RESPONSE TEXT:", response.text)
+            #print("RESPONSE JSON:", response.json())
 
 
             if response.status_code == 200:
