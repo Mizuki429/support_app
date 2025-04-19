@@ -13,7 +13,7 @@ from .forms import IdealLifeForm
 from django.http import HttpResponse
 
 load_dotenv()
-
+api_model = "anthropic/claude-3-sonnet"
 #最初に何に困っているかを聞いたあと、AIに裏で問い合わせる
 # OpenRouter API クライアント初期化
 client = OpenAI(
@@ -40,7 +40,7 @@ def ask_concern(request):
 
             try:
                 response = client.chat.completions.create(
-                    model="mistralai/mistral-7b-instruct",  # 必要に応じて他モデルに変更可能
+                    model=api_model,  # 必要に応じて他モデルに変更可能
                     messages=[
                         {"role": "system", "content": "あなたは共感的なアシスタントです。"},
                         {"role": "user", "content": prompt}
@@ -157,7 +157,7 @@ def summary(request):
 
     try:
         response = client.chat.completions.create(
-            model="anthropic/claude-3-haiku",
+            model=api_model,
             messages=[
                 {"role": "system", "content": "あなたは共感的で、やさしく思いやりのあるカウンセラーです。"},
                 {"role": "user", "content": prompt}
