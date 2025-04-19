@@ -71,6 +71,7 @@ def ask_concern(request):
 
 #AIで問い合わせた場面をもとに質問を掘り下げる
 def confirm_scene(request):
+    print("confirm_scene")
     print(request.session.get("scene_suggestion"))
     suggestion = request.session.get("suggestion")
     
