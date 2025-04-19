@@ -14,6 +14,7 @@ from django.http import HttpResponse
 
 load_dotenv()
 api_model = "anthropic/claude-3-sonnet"
+max_token = 300
 #最初に何に困っているかを聞いたあと、AIに裏で問い合わせる
 # OpenRouter API クライアント初期化
 client = OpenAI(
@@ -45,7 +46,7 @@ def ask_concern(request):
                         {"role": "system", "content": "あなたは共感的なアシスタントです。"},
                         {"role": "user", "content": prompt}
                     ],
-                    max_tokens=200
+                    max_tokens=max_token
                 )
 
                 suggestion = response.choices[0].message.content.strip()
@@ -161,7 +162,7 @@ def summary(request):
                 {"role": "system", "content": "あなたは共感的で、やさしく思いやりのあるカウンセラーです。"},
                 {"role": "user", "content": prompt}
             ],
-            max_tokens=200
+            max_tokens=max_token
         )
         ai_response = response.choices[0].message.content
     except Exception as e:
