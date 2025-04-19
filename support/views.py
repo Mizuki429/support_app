@@ -50,7 +50,9 @@ def ask_concern(request):
                 )
 
                 suggestion = response.choices[0].message.content.strip()
-		print(suggestion)
+
+                print(suggestion)
+
                 request.session["scene_suggestion"] = suggestion
                 return redirect("confirm_scene")
 
