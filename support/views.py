@@ -14,7 +14,7 @@ from django.http import HttpResponse
 
 load_dotenv()
 api_model = "anthropic/claude-3-haiku"
-max_token = 300
+max_token = 500
 #最初に何に困っているかを聞いたあと、AIに裏で問い合わせる
 # OpenRouter API クライアント初期化
 client = OpenAI(
