@@ -51,6 +51,9 @@ def ask_concern(request):
 
                 suggestion = response.choices[0].message.content.strip()
 
+                print("✅ フォーム通過")
+                print("suggestion:", suggestion)
+
                 request.session["scene_suggestion"] = suggestion
                 return redirect("confirm_scene")
 
@@ -68,8 +71,9 @@ def ask_concern(request):
 
 #AIで問い合わせた場面をもとに質問を掘り下げる
 def confirm_scene(request):
+    print(request.session.get("scene_suggestion"))
     suggestion = request.session.get("suggestion")
-
+    
     if not suggestion:
         messages.warning(request, "AIの推測結果が見つかりませんでした。もう一度入力してください。")
         return redirect("ask_concern")
