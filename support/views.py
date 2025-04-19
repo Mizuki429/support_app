@@ -40,13 +40,12 @@ def ask_concern(request):
 
             try:
                 response = client.chat.completions.create(
-                    model=api_model,  # 必要に応じて他モデルに変更可能
+                    model=api_model,
                     messages=[
                         {"role": "system", "content": "あなたは共感的なアシスタントです。"},
                         {"role": "user", "content": prompt}
                     ],
-                    max_tokens=200,
-                    temperature=0.7,
+                    max_tokens=200
                 )
 
                 suggestion = response.choices[0].message.content.strip()
@@ -161,7 +160,8 @@ def summary(request):
             messages=[
                 {"role": "system", "content": "あなたは共感的で、やさしく思いやりのあるカウンセラーです。"},
                 {"role": "user", "content": prompt}
-            ]
+            ],
+            max_tokens=200
         )
         ai_response = response.choices[0].message.content
     except Exception as e:
